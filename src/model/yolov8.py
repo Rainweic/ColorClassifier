@@ -1,15 +1,9 @@
-
 from ultralytics import YOLO
 
 
-class YoloV8:
+def load_model(model_path):
+    return YOLO(model_path)
 
-    def __init__(self):
-        self.model = None
-
-    def load_model(self, model_path):
-        self.model = YOLO(model_path)
-
-    def infer(self, img_path):
-        res = self.model(img_path)
-        return res
+def infer(model, img_path):
+    res = model(img_path)
+    return res
