@@ -1,7 +1,6 @@
 use pyo3::prelude::*;
-use pyo3::types::{IntoPyDict, PyTuple};
 
-static PYTHON_FILE_PATH: &str = "yolov8.py";
+static PYTHON_FILE_PATH: &str = include_str!("yolov8.py");
 
 pub struct DetModule {
     pub instance: Option<Py<PyAny>>
@@ -11,10 +10,9 @@ impl DetModule {
     pub fn new() -> Self {
 
         let mut det_module = Self { instance: None };
-        let python_file_path = include_str!("yolov8.py");
 
         Python::with_gil(|py| {
-            let det: &PyModule = PyModule::from_code(py, python_file_path, "", "")
+            let det: &PyModule = PyModule::from_code(py, PYTHON_FILE_PATH, "", "")
                 .expect("Load det module error");
             let instance: Py<PyAny> = det.getattr("yolov8")
                 .expect("Get obj yolov8 failed").into();
