@@ -11,6 +11,3 @@ opencv = "0.88.2"
 [dependencies.pyo3]
 version = "0.20.0"
 features = ["auto-initialize"]
-
-[target.x86_64-apple-darwin]
-rustflags = ["-Clink-arg=-undefined", "-Clink-arg=dynamic_lookup", "-rpath=/opt/anaconda3/lib"]

@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-use pyo3::types::PyTuple;
+use pyo3::types::{IntoPyDict, PyTuple};
 
 static PYTHON_FILE_PATH: &str = "yolov8.py";
 
@@ -39,26 +39,24 @@ impl DetModule {
     pub fn load_model(&mut self, model_file: &str) {
         Python::with_gil(|py| {
             let load_model_args = PyTuple::new(py, &[model_file]);
-            let model_module = self.func_load_model.call1(py, load_model_args)
+            let model_module = self.func_load_model.as_ref().unwrap()
+                .call1(py, load_model_args)
                 .expect("Load model file error");
 
             self.model_module = Some(model_module);
         });
     }
 
-    pub fn infer(&self, img_path: &str) -> Option<PyResult<PyObject>> {
+    pub fn infer(&self, img_path: &str) -> Option<PyObject> {
         let mut infer_res = None;
 
         Python::with_gil(|py| {
-            match self.model_module.unwrap() {
-                None => PyErr::new("The module is uninitialized"),
-                Some(model_module) => {
-                    let infer_args = PyTuple::new(py, &[model_module, img_path]);
-                    infer_res = Option::from(
-                        self.func_infer.expect("The module is uninitialized")
-                            .call1(py, infer_args));
-                }
-            }
+            let infer_args = [(self.model_module.as_ref().unwrap(), img_path)]
+                .into_py_dict(py);
+            let res = self.func_infer.as_ref().unwrap()
+                .call(py, (), Some(infer_args))
+                .expect("Infer error");
+            infer_res = Some(res);
         });
 
         infer_res
