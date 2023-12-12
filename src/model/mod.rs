@@ -41,7 +41,7 @@ impl DetModule {
             let res = self.instance.as_ref().unwrap()
                 .call_method1(py, "infer", args)
                 .expect("Infer error, img path: {img_path}");
-            infer_res = Some(res);
+            // infer_res = Some(res);
         });
 
         infer_res
