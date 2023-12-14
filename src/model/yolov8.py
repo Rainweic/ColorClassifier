@@ -15,3 +15,5 @@ class YoloV8:
 
 
 yolov8 = YoloV8()
+# yolov8.load_model("yolov8n.pt")
+# yolov8.infer("/Users/new/Downloads/car.png")
