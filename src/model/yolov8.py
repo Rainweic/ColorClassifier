@@ -10,10 +10,8 @@ class YoloV8:
         self.model = YOLO(model_path)
 
     def infer(self, img_path):
-        res = self.model(img_path)
-        return res
+        res_list = self.model(img_path)[0].tojson()
+        return res_list
 
 
 yolov8 = YoloV8()
-# yolov8.load_model("yolov8n.pt")
-# yolov8.infer("/Users/new/Downloads/car.png")
