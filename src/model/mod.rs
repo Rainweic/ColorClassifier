@@ -5,20 +5,20 @@ use serde_json;
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
-struct Box {
-    x1: f64,
-    y1: f64,
-    x2: f64,
-    y2: f64
+pub struct Box {
+    pub x1: f64,
+    pub y1: f64,
+    pub x2: f64,
+    pub y2: f64
 }
 
 #[allow(dead_code)]
 #[derive(Deserialize, Debug)]
 pub struct DetResult {
-    name: String,
-    class: u32,
-    confidence: f64,
-    bbox: Box
+    pub name: String,
+    pub class: u32,
+    pub confidence: f64,
+    pub bbox: Box
 }
 
 pub struct DetModule {
@@ -64,13 +64,19 @@ impl DetModule {
                 Ok(res_str) => {
                     let res_str = res_str.replace("box", "bbox");
                     infer_res = serde_json::from_str(res_str.as_str()).expect("反序列化错误");
-                    println!("{:?}", infer_res);
+                    // println!("{:?}", infer_res);
                 },
                 Err(err) => {
                     println!("{:?}", err.to_string());
                 }
             }
         });
+
+        if infer_res.len() == 0 {
+            println!("未检测到目标");
+        } else {
+            println!("检测到{:?}个目标", infer_res.len());
+        }
 
         infer_res
     }

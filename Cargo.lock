@@ -3,16 +3,6 @@
 version = 3
 
 [[package]]
-name = "ColorClassifier"
-version = "0.1.0"
-dependencies = [
- "opencv",
- "pyo3",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -66,6 +56,16 @@ checksum = "c688fc74432808e3eb684cae8830a86be1d66a2bd58e1f248ed0960a590baf6f"
 dependencies = [
  "glob",
  "libc",
+]
+
+[[package]]
+name = "color_classifier"
+version = "0.1.0"
+dependencies = [
+ "opencv",
+ "pyo3",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
