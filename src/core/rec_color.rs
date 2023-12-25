@@ -6,11 +6,12 @@ use opencv::imgproc::{cvt_color, COLOR_BGR2GRAY, threshold, THRESH_BINARY, THRES
 use crate::model::{DetModule, DetResult};
 
 
-/// Step1 提取ROI
-/// Step2 做区域分割
-/// Step3 做颜色提取
+/// 对单张完整图片内的每一个圆点做HSV颜色提取额
+///     Step1 提取ROI
+///     Step2 做区域分割
+///     Step3 做颜色提取
 #[allow(dead_code)]
-pub fn color_extraction(yolo: DetModule, img_path: &str) {
+pub fn color_extraction(yolo: DetModule, img_path: &str) -> Result<Vec<(i32, i32, i32)>, String>{
 
     let det_res_vec: Vec<DetResult> = yolo.infer(img_path);
     let img = imread(img_path, IMREAD_COLOR);
@@ -25,10 +26,14 @@ pub fn color_extraction(yolo: DetModule, img_path: &str) {
             let img_seg_vec = segmentation(img_roi_vec);
 
             // 颜色提取
-            cal_mean_value_of_hsv(img_seg_vec);
+            let mean_hsv_vec = cal_mean_value_of_hsv(img_seg_vec);
+
+            return Ok(mean_hsv_vec);
         },
         Err(e) => {
-            println!("读取图片错误: {:?}", e.to_string());
+            let error_info = format!("读取图片错误: {:?}", e.to_string());
+            println!("{}", error_info);
+            return Err(error_info);
         }
     }
 }
