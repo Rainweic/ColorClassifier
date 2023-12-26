@@ -1,11 +1,11 @@
-use color_classifier::model::DetModule;
+use rocket::{launch, routes};
+// use color_classifier::model::DetModule;
 use color_classifier::core::rec_color;
+use color_classifier::app::api::{api_color_extraction, api_status};
 
-
-fn main() {
-    let mut yolo = DetModule::new();
-    yolo.load_model("yolov8n.pt");
-    rec_color::color_extraction(yolo, "/home/cu/ColorClassifier/car.jpg");
+#[launch]
+fn start() -> _ {
+    rocket::build().mount("/api", routes![api_color_extraction, api_status])
 }
 
 #[cfg(test)]
